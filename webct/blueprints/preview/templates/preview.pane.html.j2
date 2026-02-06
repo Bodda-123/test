@@ -3,6 +3,7 @@
 		<sl-button pill size="small" id="buttonPreviewLayout">Scene</sl-button>
         <sl-button pill size="small" id="buttonPreviewSim">3D Sim</sl-button>
 		<sl-button pill size="small" id="buttonPreviewProjection" variant="primary">Projection</sl-button>
+		<sl-button pill size="small" id="buttonPreviewReconstruction">Reconstruction</sl-button>
 	</sl-button-group>
 </div>
 
@@ -42,6 +43,41 @@
 
     <div id="previewSim" name="simulation" style="width: 100%; height: 100%; position: relative;">
         <div id="simContainer" style="width: 100%; height: 100%;"></div>
+		<div class="sim-overlay sim-header">
+			<div class="sim-branding">
+				<img src="{{ url_for('static', filename='img/logo_faculty.png') }}" alt="Faculty Logo">
+				<img src="{{ url_for('static', filename='img/logo_radiology.png') }}" alt="Radiology Department Logo">
+			</div>
+			<div class="sim-title">
+				<p>Educational CT Workflow Simulator</p>
+				<span>Welcome, {{ student_name }}</span>
+			</div>
+		</div>
+		<div class="sim-overlay sim-workflow">
+			<h3>CT Workflow</h3>
+			<ol id="simWorkflow">
+				<li data-step="entry">Patient enters the room</li>
+				<li data-step="position">Patient lies on the table</li>
+				<li data-step="move">Table moves into the gantry</li>
+				<li data-step="scan">Scan in progress</li>
+				<li data-step="complete">Scan complete</li>
+			</ol>
+			<p id="simStatus">Ready to begin. Click “Start CT Scan”.</p>
+		</div>
+		<div class="sim-overlay sim-info" id="simInfoPanel">
+			<h3>Anatomical Focus</h3>
+			<p id="simInfoTitle">Click a body part (head, chest, or arm) to learn why it is scanned.</p>
+			<p id="simInfoText">Highlights show attenuation characteristics and CT relevance.</p>
+			<sl-button id="btnResetView" size="small" variant="neutral">Reset Camera View</sl-button>
+		</div>
+		<div class="sim-overlay sim-results">
+			<h3>Simulation Results</h3>
+			<p>View the projection image, transmission histogram, and reconstructed slice to connect workflow with outputs.</p>
+			<div class="sim-results-actions">
+				<sl-button id="btnViewProjection" size="small" variant="primary">Projection & Histogram</sl-button>
+				<sl-button id="btnViewReconstruction" size="small">Reconstruction</sl-button>
+			</div>
+		</div>
         <sl-button id="btnStartScan" variant="success" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">Start CT Scan</sl-button>
     </div>
 

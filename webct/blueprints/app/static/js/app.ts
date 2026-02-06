@@ -421,14 +421,22 @@ function setupVisualSim() {
 	const btnSim = document.getElementById("buttonPreviewSim") as SlButton;
 	const btnLayout = document.getElementById("buttonPreviewLayout") as SlButton;
 	const btnProj = document.getElementById("buttonPreviewProjection") as SlButton;
+	const btnRecon = document.getElementById("buttonPreviewReconstruction") as SlButton;
 	const previewPane = document.getElementById("previewPane") as HTMLDivElement;
+	const settingsPane = document.getElementById("settingsPane") as HTMLDivElement;
+	const graphContainer = document.getElementById("previewGraphContainer") as HTMLDivElement;
 
 	if (btnSim && previewPane) {
 		btnSim.onclick = () => {
 			btnSim.variant = "primary";
 			btnLayout.variant = "default";
 			btnProj.variant = "default";
+			if (btnRecon) {
+				btnRecon.variant = "default";
+			}
 			previewPane.setAttribute("selected", "simulation");
+			settingsPane?.setAttribute("selected", "simulation");
+			graphContainer?.setAttribute("selected", "simulation");
 		}
 	}
 
@@ -436,11 +444,43 @@ function setupVisualSim() {
 	if (btnLayout) {
 		btnLayout.addEventListener("click", () => {
 			btnSim.variant = "default";
+			if (btnRecon) {
+				btnRecon.variant = "default";
+			}
 		});
 	}
 	if (btnProj) {
 		btnProj.addEventListener("click", () => {
 			btnSim.variant = "default";
+			if (btnRecon) {
+				btnRecon.variant = "default";
+			}
 		});
+	}
+	if (btnRecon && previewPane) {
+		btnRecon.onclick = () => {
+			btnRecon.variant = "primary";
+			btnSim.variant = "default";
+			btnLayout.variant = "default";
+			btnProj.variant = "default";
+			previewPane.setAttribute("selected", "recon");
+			settingsPane?.setAttribute("selected", "recon");
+			graphContainer?.setAttribute("selected", "recon");
+		}
+	}
+
+	const btnViewProjection = document.getElementById("btnViewProjection") as SlButton;
+	if (btnViewProjection && btnProj) {
+		btnViewProjection.onclick = () => {
+			btnProj.click();
+			previewPane.setAttribute("selected", "projection");
+		}
+	}
+
+	const btnViewReconstruction = document.getElementById("btnViewReconstruction") as SlButton;
+	if (btnViewReconstruction && btnRecon) {
+		btnViewReconstruction.onclick = () => {
+			btnRecon.click();
+		}
 	}
 }

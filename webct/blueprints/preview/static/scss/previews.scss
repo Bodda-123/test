@@ -79,6 +79,96 @@ img.image-layout {
 	width: 100%;
 }
 
+.sim-overlay {
+	position: absolute;
+	background: rgba(255, 255, 255, 0.92);
+	border: 1px solid var(--sl-color-neutral-200);
+	border-radius: var(--sl-border-radius-medium);
+	box-shadow: var(--sl-shadow-medium);
+	padding: 0.75rem 1rem;
+	color: var(--sl-color-neutral-700);
+	font-size: 0.85rem;
+	z-index: 2;
+}
+
+.sim-overlay h3 {
+	margin: 0 0 0.5rem;
+	font-size: 0.95rem;
+	color: var(--sl-color-primary-700);
+}
+
+.sim-header {
+	top: 1rem;
+	left: 1rem;
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+	max-width: 320px;
+}
+
+.sim-branding img {
+	height: 36px;
+	width: auto;
+}
+
+.sim-title p {
+	margin: 0;
+	font-weight: 600;
+}
+
+.sim-title span {
+	color: var(--sl-color-neutral-500);
+	font-size: 0.75rem;
+}
+
+.sim-workflow {
+	top: 1rem;
+	right: 1rem;
+	width: 240px;
+}
+
+.sim-workflow ol {
+	margin: 0 0 0.5rem;
+	padding-left: 1.25rem;
+}
+
+.sim-workflow li {
+	margin-bottom: 0.35rem;
+	color: var(--sl-color-neutral-600);
+}
+
+.sim-workflow li.is-active {
+	font-weight: 600;
+	color: var(--sl-color-primary-700);
+}
+
+.sim-workflow li.is-complete {
+	color: var(--sl-color-success-700);
+}
+
+.sim-info {
+	bottom: 5rem;
+	left: 1rem;
+	width: 280px;
+}
+
+.sim-info sl-button {
+	margin-top: 0.5rem;
+	width: 100%;
+}
+
+.sim-results {
+	bottom: 5rem;
+	right: 1rem;
+	width: 260px;
+}
+
+.sim-results-actions {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
 #previewPane:not([selected=projection]) #previewImage {
 	display: none;
 }
@@ -88,6 +178,10 @@ img.image-layout {
 }
 
 #previewPane:not([selected=recon]) #previewReconstruction {
+	display: none;
+}
+
+#previewPane:not([selected=simulation]) #previewSim {
 	display: none;
 }
 
