@@ -1,0 +1,558 @@
+@use "../../../base/static/scss/base.scss";
+@use "group.scss";
+@use "../../../preview/static/scss/previews.scss";
+@use "../../../samples/static/scss/models.scss";
+@use "../../../detector/static/scss/detector.scss";
+@use "../../../capture/static/scss/capture.scss";
+@use "../../../reconstruction/static/scss/recon.scss";
+
+#sidebar {
+	background-color: var(--sl-color-primary-200);
+	border-right: solid 1px var(--sl-color-neutral-200);
+	overflow-y: scroll;
+	padding: 40px 0 0;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	transition: transform 250ms ease-out;
+	width: 300px;
+	margin-left: 63px;
+	/* border-left: solid 3px var(--sl-color-primary-500); */
+}
+
+div.tooltip {
+	// Fix for tooltip hoisting
+	z-index: 900;
+}
+
+abbr {
+	// text-decoration-style: dashed;
+	text-decoration-line: none;
+}
+
+#imagebar {
+	background-color: var(--sl-color-gray-500);
+	border-right: solid 1px rgb(var(--sl-color-neutral-200));
+	overflow: hidden;
+	padding: 0px 0 0;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	transition: transform 250ms ease-out;
+	width: 63px;
+	z-index: 1;
+}
+
+.derived {
+	text-align: center;
+	color: var(--sl-color-neutral-500);
+}
+
+.content {
+	padding-top: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 395px;
+	transition: left 250ms ease;
+	overflow: hidden;
+}
+
+.markdown-section {
+	margin: 0 auto;
+	overflow-anchor: none;
+	max-width: 860px;
+	padding: 30px 15px 40px 15px;
+	position: relative;
+}
+
+section.tab {
+	display: block;
+}
+
+.invert {
+	filter: invert(1);
+}
+
+section.tab sl-button {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#buttonConfigUpload {
+	padding-right: 1rem;
+}
+
+section.tab h2 {
+	margin: 0 auto 1rem;
+	font-size: 1.3rem;
+	font-weight: 300;
+	text-align: center;
+}
+
+sl-menu-item::part(base) {
+	white-space: unset;
+}
+
+sl-checkbox > span,
+sl-switch > span,
+sl-menu-item > span {
+	font-size: small;
+	color: var(--sl-color-gray-500);
+}
+
+section.tab h1 {
+	margin: 0 auto 1rem;
+	font-size: 1.5rem;
+	font-weight: 300;
+	text-align: center;
+}
+
+section.tab > * {
+	margin: 0 auto 1rem;
+}
+
+section.tab:not([active]) {
+	display: none;
+}
+
+.sidebar-nav {
+	line-height: 2em;
+	padding: 0 1rem;
+	padding-bottom: 40px;
+}
+
+
+main > section.content > sl-split-panel {
+	--divider-width: 0.25rem;
+	overflow: hidden;
+	position: fixed;
+	inset: 0 0 0 calc(363px + 1rem);
+	max-height: 100%;
+	--max: 80%;
+	--min: 20%;
+	margin-left: 1rem;
+}
+sl-split-panel::part(divider) {
+	background-color: var(--sl-color-primary-500);
+}
+
+sl-split-panel > sl-icon {
+	position: absolute;
+	border-radius: var(--sl-border-radius-small);
+	background: var(--sl-color-primary-500);
+	color: var(--sl-color-neutral-0);
+	padding: 0.125rem 0.4rem;
+}
+
+sl-input > *[slot=suffix] > * {
+	margin: 0;
+	background-color: inherit;
+}
+
+sl-input > *[slot=suffix] > *::part(base) {
+	background-color: inherit;
+}
+
+sl-input > *[slot=suffix] > *::part(label) {
+	padding-left: 0.5rem;
+}
+
+sl-input > *[slot=suffix] {
+	margin: 0;
+}
+
+sl-menu-item[active] {
+	background-color: var(--sl-color-primary-200);
+}
+
+sl-menu[type=units] > sl-menu-item::part(base) {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+aside#imagebar {
+	padding-top: 5rem;
+	overflow-x: hidden;
+}
+aside#imagebar > sl-tooltip > sl-button {
+	margin-top: 1rem;
+	font-size: large;
+	align-content: center;
+}
+
+aside#imagebar > sl-tooltip > sl-button[type="primary"]::part(base) {
+	background-color: var(--sl-color-primary-200);
+}
+
+*::part(form-control-help-text) {
+	margin-left: 0.5rem;
+}
+
+aside#imagebar > sl-tooltip > sl-button > sl-icon {
+	font-size: inherit;
+	width: 2rem;
+	height: 2rem;
+	padding: 0;
+	margin: 0;
+	position: inherit;
+}
+
+section #webgl {
+	background-color: var(--sl-color-primary-50);
+	overflow-y: hidden;
+}
+
+// only supported on updated browsers, but cleans up the dividers
+main > section > sl-split-panel > .half-pane:has([type="detector"][active]) {
+	padding: 0rem;
+}
+
+.half-pane {
+	height: 100%;
+	overflow-y: scroll;
+	margin: 0;
+	display: flex;
+	padding: 1rem;
+	box-sizing: border-box;
+}
+
+.pane {
+	margin: 0;
+	padding: 0;
+	display: none;
+	height: 100%;
+	width: 100%;
+}
+
+.previewContainer {
+    display: none;
+    height: 100%;
+    width: 100%;
+}
+
+.previewContainer[selected="projection"] > #previewImage {
+    display: flex;
+}
+
+.previewContainer[selected="layout"] > #previewLayout {
+    display: flex;
+}
+
+.previewContainer[selected="simulation"] > #previewSim {
+    display: block;
+}
+
+#previewSim {
+    display: none;
+}
+
+.pane[active] {
+	display: flex;
+}
+
+.pane > .pane {
+	display: block;
+}
+
+.pane > .pane > sl-button-group {
+	display: block;
+	position: fixed;
+	margin-top: -1.5rem;
+}
+
+.invalid:not([disabled])::part(form-control-label),
+.invalid:not([disabled])::part(form-control-help-text) {
+	color: var(--sl-color-danger-600);
+}
+
+.invalid:not([disabled])::part(base) {
+	border-color: var(--sl-color-danger-500);
+}
+
+.invalid:focus-within::part(base) {
+	box-shadow: 0 0 0 var(--sl-focus-ring-width) var(--sl-color-danger-500);
+}
+
+.warning:not([disabled])::part(form-control-label),
+.warning:not([disabled])::part(form-control-help-text) {
+	color: var(--sl-color-warning-600);
+}
+
+.warning:not([disabled])::part(base) {
+	border-color: var(--sl-color-warning-500);
+}
+
+.warning:focus-within::part(base) {
+	box-shadow: 0 0 0 var(--sl-focus-ring-width) var(--sl-color-warning-500);
+}
+
+::part(form-control-help-text) {
+	line-height: 1.25;
+	padding-top: 2px;
+}
+
+#barLoading {
+	--height: 0.5rem;
+	border-radius: 0;
+	transition: all 1s ease-out;
+	position: absolute;
+	width: 100%;
+}
+
+#barLoading[hidden] {
+	--height: 0;
+	transition: all 1s ease-out;
+}
+
+sl-progress-bar[variant="default"]::part(indicator) {
+	animation-duration: 1.5s;
+}
+
+
+sl-progress-bar[variant="long"]::part(indicator) {
+	animation-direction: reverse;
+	animation-duration: 3.5s;
+}
+
+#appIcons {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 21;
+	font-size: 2rem;
+	color: white;
+	width: 60px;
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+}
+
+#appIcons sl-icon-button {
+	display: flex;
+	align-content: center;
+}
+
+#appIcons sl-icon-button::part(base) {
+	color: white;
+}
+
+#appIcons sl-icon-button::part(base):hover,
+#appIcons sl-icon-button::part(base):focus {
+	color: var(--sl-color-primary-300);
+}
+
+#appIcons sl-icon-button::part(base):active {
+	color: var(--sl-color-primary-500);
+}
+
+.version {
+	font-size: 0.7rem;
+	margin: 0;
+}
+
+.dialogpanel {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: max-content auto;
+}
+
+.dialogpanel sl-checkbox[checked]::part(label) {
+	color: var(--sl-color-primary-500);
+}
+
+.dialogpanel > :first-child {
+	border-right: var(--sl-color-neutral-300) solid 0.2rem;
+	padding-right: 1rem;
+}
+
+#dialogueConfig {
+	--width:60%
+}
+
+.dialogpanel ul {
+	padding-left: 0;
+	list-style-type: none;
+}
+
+.dialogpanel li {
+	padding: 1rem;
+	border-radius: var(--sl-border-radius-small);
+	background-color: var(--sl-color-neutral-200);
+	background-color: var(--sl-color-neutral-100);
+	margin-top: 0.5rem;
+	border-color: var(--sl-color-neutral-200);
+	border-style: solid;
+	border-width: 1px;
+}
+
+// .dialogpanel li[checked] {
+// 	background-color: var(--sl-color-primary-200);
+// 	border-color: var(--sl-color-primary-400);
+// }
+
+.downloadPanel {
+	padding-left: 1rem;
+	padding-right: 0.25rem;
+	overflow: hidden;
+}
+
+.downloadPanel > div > div:first-child {
+	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+}
+
+.downloadPanel > div > :first-child img {
+	max-height: 30rem;
+	width: auto;
+	object-fit: contain;
+}
+
+.downloadPreview {
+	height: 28rem;
+	border: 2px dashed var(--sl-color-neutral-300);
+	margin-right: 1rem;
+	border-radius: var(--sl-border-radius-large);
+	padding: 1rem;
+	overflow-y: scroll;
+}
+
+.downloadPreview pre {
+	margin: 0;
+}
+
+.settingsPanel {
+	background-color: var(--sl-color-neutral-100);
+	// border: 2px dashed var(--sl-color-neutral-300);
+	border-radius: var(--sl-border-radius-large);
+	padding: 1rem;
+	margin-top: 1rem;
+	width: 95%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.settingsPanel > sl-input {
+	padding: 0.5rem;
+	width: auto;
+}
+
+#buttonMode {
+	width: 10rem;
+}
+
+sl-tag[size="x-small"]::part(base) {
+	font-size: 0.75rem;
+	padding: 0.2rem;
+	margin-left: 0.3rem;
+}
+
+.hidden {
+	// Force hide elements with .hidden even if display modes are overridden
+	// from higher specificity sources
+	display: none !important;
+}
+
+#dialogueConfig > div.dialogpanel > div:not(.downloadPanel) {
+	display: grid;
+	grid-template-rows: 21.3rem auto 3rem;
+}
+
+#dialogueConfig > div.dialogpanel > div:not(.downloadPanel) > ul {
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
+
+#dialogueConfig > div.dialogpanel > div:not(.downloadPanel) > div {
+	grid-row-start: 3;
+	grid-row-end: 4;
+}
+
+#dialogueConfig > div.dialogpanel > div:not(.downloadPanel) > p {
+	grid-row-start: 2;
+	grid-row-end: 3;
+	font-size: var(--sl-font-size-x-small);
+	color: var(--sl-color-gray-500);
+}
+
+#dialogueConfig > div.dialogpanel > div:not(.downloadPanel) > sl-button {
+	grid-row-start: 4;
+	grid-row-end: 5;
+}
+
+#settingsPanelGVXR[mode="gvxr"] > #inputOptSimReconstructionFolder {
+	display: none;
+}
+
+#panelImport {
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: auto;
+}
+
+#panelImport > div {
+	grid-row-start: 1;
+	grid-column-start: 1;
+}
+
+// #areaConfigUpload {
+// 	background-color: var(--sl-color-neutral-100);
+// 	// border: 2px dashed var(--sl-color-neutral-300);
+// 	border-radius: var(--sl-border-radius-large);
+// 	padding: 1rem;
+// 	margin-top: 0.5rem;
+// 	margin-bottom: 0.5rem;
+// 	min-height: 10rem;
+// }
+
+#dialogueDownload {
+	--width:80%
+}
+
+#dialogueDownload > .downloadPanel {
+	grid-template-columns: 50% 50%;
+	display: grid;
+	column-gap: 20px;
+}
+
+#dialogueDownload > .downloadPanel > div > sl-button-group + p {
+	margin-top: 0;
+	color: var(--sl-color-gray-500);
+}
+
+#dialogueDownload > .downloadPanel > div > h1 {
+	text-align: center;
+}
+
+sl-dialog::part(footer) {
+	padding-top: 0;
+}
+
+sl-dialog::part(body) {
+	padding-bottom: 0;
+}
+
+#panelDownloadStatus {
+	overflow: hidden;
+}
+
+#panelDownloadStatus > div {
+	transition: all 0.5s ease-in-out;
+}
+
+#panelDownloadStatus:not([active]) > div {
+	transition: all 1s ease-in-out;
+	transform: translateY(10rem);
+	transition-delay: 5s;
+}
+
+#panelDownloadStatus:not([active])  sl-spinner {
+	display: none;
+}

@@ -1,0 +1,78 @@
+<h1> Capture </h1>
+<!-- <sl-input label="Capture Preset Name" help-text="A user-friendly name of the preset." placeholder="360 Capture"
+	value="360 deg Capture"></sl-input> -->
+
+{% include "update-button.html.j2" %}
+
+<sl-button variant="warning" class="button-capture">Generate X-rays
+	<sl-icon slot="prefix" name="radioactive"></sl-icon>
+</sl-button>
+
+<div class="group">
+	<div>
+		<sl-select label="Total Rotation" value="360" id="selectCaptureRotation">
+			<sl-menu-item value="180">180 Degrees</sl-menu-item>
+			<sl-menu-item value="360">360 Degrees</sl-menu-item>
+		</sl-select>
+
+		<sl-input label="Total projections" type="number" id="inputCaptureProjections" min="2" max="2000" step="1"
+			value="360"></sl-input>
+		<sl-dropdown>
+			<sl-button slot="trigger" caret>Optimal Projections</sl-button>
+			<sl-menu>
+				<sl-range id="rangeNyquist" label="Nyquist" max="100" min="1" step="1"
+					help-text="π/2 * Horizontal Detector Pixels"></sl-range>
+			</sl-menu>
+		</sl-dropdown>
+	</div>
+	<!-- <button></button> -->
+</div>
+
+<div class="group">
+	<div>
+		<p>Sample Rotation</p>
+		<div style="grid-template-columns: repeat(3, minmax(0, 1fr)); display: grid;">
+			<sl-input label="Pitch" type="number" min="0" max="360" step="0.1" id="inputSampleRotateX"></sl-input>
+			<sl-input label="Yaw" type="number" min="0" max="360" step="0.1"   id="inputSampleRotateY"></sl-input>
+			<sl-input label="Roll" type="number" min="0" max="360" step="0.1"  id="inputSampleRotateZ"></sl-input>
+		</div>
+		<sl-button-group label="Quick Rotate">
+			<sl-button class="button-loadonupdate" id="buttonSampleRotateCounterClock45"><sl-icon slot="prefix" name="arrow-counterclockwise"></sl-icon>-45°</sl-button>
+			<sl-button class="button-loadonupdate" id="buttonSampleRotateClock45"><sl-icon slot="suffix" name="arrow-clockwise"></sl-icon>+45°</sl-button>
+		</sl-button-group>
+
+		<sl-checkbox id="checkboxLaminographyEnabled">Enable Laminography Mode</sl-checkbox>
+		<p>Laminography mode rotates the rotation axis, rather than the sample.</p>
+		</div>
+	</div>
+</div>
+
+<div class="group">
+	<div>
+		<div id="gridSDD">
+			<p style="text-align: left;">Source</p>
+			<p id="textSDD">500mm</p>
+			<p style="text-align: right;">Detector</p>
+		</div>
+		<sl-range id="rangeSamplePosition" max="100" min="0" step="0.1" tooltip="none"></sl-range>
+		<div id="gridSOD">
+			<p id="textSOD">400mm</p>
+			<p>Sample</p>
+			<p id="textODD">100mm</p>
+		</div>
+
+		<p class="derived"><abbr title="Magnificaton = Source-Detector-Distance / Source-Object-Distance"><span id="textMagnification">1.004 Magnification</span></abbr></p>
+		<p class="derived"><abbr title="Voxel Size = Pixel Size / Magnification"><span id="textVoxelSize">1mm3 Voxel Size</span></abbr></p>
+
+		<p>Beam source to sample</p>
+		<sl-input advanced type="number" max="1000" step="0.1" min="-1000" id="inputBeamPosX" label=""><span slot="prefix">X</span>0<span slot="suffix">mm</span></sl-input>
+		<sl-input type="number" max="1000" step="0.1" min="-1000" id="inputBeamPosY"><span slot="prefix">Y</span>0<span slot="suffix">mm</span></sl-input>
+		<sl-input advanced type="number" max="1000" step="0.1" min="-1000" id="inputBeamPosZ"><span slot="prefix">Z</span>100<span slot="suffix">mm</span></sl-input>
+
+		<p>Detector to sample</p>
+		<sl-input advanced type="number" max="1000" step="0.1" min="-1000" id="inputDetectorPosX" label=""><span slot="prefix">X</span>0<span slot="suffix">mm</span></sl-input>
+		<sl-input type="number" max="1000" step="0.1" min="-1000" id="inputDetectorPosY"><span slot="prefix">Y</span>0<span slot="suffix">mm</span></sl-input>
+		<sl-input advanced type="number" max="1000" step="0.1" min="-1000" id="inputDetectorPosZ"><span slot="prefix">Z</span>-144.92<span slot="suffix">mm</span></sl-input>
+	</div>
+	<button></button>
+</div>

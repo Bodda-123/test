@@ -1,0 +1,111 @@
+<h1>Detector</h1>
+<!-- <sl-input label="Detector Preset Name" help-text="A user-friendly name of the preset."
+	placeholder="Example detector pane" value="Swansea Pane"></sl-input> -->
+{% include "update-button.html.j2" %}
+
+<div class="group">
+	<div>
+		<div style="grid-template-columns: repeat(2, minmax(0, 1fr)); display: grid;">
+			<sl-input type="number" label="Pane Width" value="640" id="inputPaneWidth">
+				{% include "./units/size.html.j2" %}
+			</sl-input>
+			<sl-input type="number" label="Pane Height" value="320" id="inputPaneHeight">
+				{% include "./units/size.html.j2" %}
+			</sl-input>
+			<sl-input type="number" value="640" id="inputPaneWidthPx">
+				{% include "./units/px.html.j2" %}
+			</sl-input>
+			<sl-input type="number" value="320" id="inputPaneHeightPx">
+				{% include "./units/px.html.j2" %}
+			</sl-input>
+		</div>
+
+		<sl-input type="number" label="Pixel Size" value="0.5" step="0.01" id="inputPanePixelSize">
+			<span slot="suffix">μm</span>
+		</sl-input>
+
+		<sl-select label="Detector Scintillator" value="" id="selectScintillator" advanced>
+			<sl-menu-item value="">Perfect Scintillator
+			</sl-menu-item>
+
+			<sl-divider></sl-divider>
+
+			<sl-menu-item value="CsI">CsI
+				<span> Cesium Iodine</span>
+			</sl-menu-item>
+
+			<sl-menu-item value="NaI">NaI
+				<span> Sodium Iodine</span>
+			</sl-menu-item>
+
+			<sl-menu-item value="Gadox">Gadox
+				<span> Gadolinum silicate (Gd2O2S)</span>
+			</sl-menu-item>
+
+			<sl-divider></sl-divider>
+
+			<sl-menu-item value="Gadox DRZ-Plus">Gadox DRZ Plus
+				<span> Gd2O2S DRZ-Plus</span>
+			</sl-menu-item>
+
+			<sl-menu-item value="Gd2O3">Gd2O3
+				<span> Gadolinum oxyde</span>
+			</sl-menu-item>
+
+			<sl-menu-item value="Gd3Ga5O12">Gd3Ga5O12
+				<span> Gadolinium gallium garnet</span>
+			</sl-menu-item>
+
+			<sl-menu-item value="YGO">YGO
+				<span> Yttrium gadolinum oxyde (Y2Gd2O3)</span>
+			</sl-menu-item>
+
+			<sl-divider></sl-divider>
+
+			<sl-menu-item value="CdWO4">CdWO4
+				<span> Cadmium tungstate</span>
+			</sl-menu-item>
+
+			<sl-menu-item value="Y2O3">Y2O3
+				<span> Yttrium oxyde</span>
+			</sl-menu-item>
+
+			<sl-menu-item value="La2HfO7">La2HfO7
+				<span> Lanthanum hafnate</span>
+			</sl-menu-item>
+
+			<sl-menu-item value="Y3Al5O12">Y3Al5O12
+				<span> Yttrium aluminium garnate</span>
+			</sl-menu-item>
+
+		</sl-select>
+
+		<sl-input type="number" label="Scintillator Thickness" value="200" id="inputScintillatorThickness" advanced>
+			<span slot="suffix">μm</span>
+		</sl-input>
+
+		<sl-checkbox id="checkboxLSFEnable" advanced>Enable Line Spread Function</sl-checkbox>
+
+		<div class="LSFGraph" advanced>
+			<canvas id="canvasLSF" width="100%"></canvas>
+		</div>
+
+		<sl-button id="buttonShowLSF" advanced>LSF Editor
+			<sl-icon slot="prefix" name="bezier"></sl-icon>
+		</sl-button>
+
+	</div>
+	<button></button>
+</div>
+
+<div class="group">
+	<div>
+		<sl-select label = "Detector Binning" value="1" id="selectDetectorBinning" help="2030x2030 => 200x200">
+			<sl-menu-item value="1">1x1 <span>1:1</span></sl-menu-item>
+			<sl-menu-item value="2">3x3 <span>1:9</span></sl-menu-item>
+			<sl-menu-item value="3">5x5 <span>1:25</span></sl-menu-item>
+			<sl-menu-item value="4">7x7 <span>1:49</span></sl-menu-item>
+		</sl-select>
+		<p>Pixel binning reduces the effective resolution of the detector, in exchange for pixel averaging.<br/> It is recommended on weaker systems</p>
+	</div>
+</div>

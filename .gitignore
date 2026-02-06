@@ -1,0 +1,46 @@
+# logs
+logs/
+
+# generated version information
+file_version_info.cfg
+webct/blueprints/base/templates/version.html.j2
+webct/version.py
+
+# conda environment
+.mamba/
+conda
+
+# Python compiled objects
+*.pyc
+__pycache__/
+
+# Runtime folders
+output/
+
+# Ignore build files and folders
+.mypy_cache/
+.pytest_cache/
+*.egg-info
+build/
+dist/
+*.js
+*.css
+node_modules/
+package-lock.json
+yarn.lock
+yarn-error.log
+tsconfig.tsbuildinfo
+*.d.ts
+
+
+# IDE configuration
+.vscode/
+
+# Rollup configuration
+!rollup.config.js
+
+# Data files
+*.stl
+
+# Notebook checkpoints
+.ipynb_checkpoints/

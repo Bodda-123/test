@@ -1,0 +1,68 @@
+<div id="previewSettings">
+	<sl-button-group>
+		<sl-button pill size="small" id="buttonPreviewLayout">Scene</sl-button>
+        <sl-button pill size="small" id="buttonPreviewSim">3D Sim</sl-button>
+		<sl-button pill size="small" id="buttonPreviewProjection" variant="primary">Projection</sl-button>
+	</sl-button-group>
+</div>
+
+<div id="previewSidebar">
+	<div id="settingsPane">
+		<div>
+			<sl-radio-group>
+				<sl-radio value="1" checked id="radioRawProjectionSetting">Raw Projection</sl-radio>
+				<sl-radio value="2" id="radioLogProjectionSetting">Log Projection</sl-radio>
+				<sl-radio value="3" id="radioTransmissionProjectionSetting">Photon Starvation</sl-radio>
+			</sl-radio-group>
+			<sl-checkbox id="checkboxInvertSetting">Invert Colours</sl-checkbox>
+		</div>
+		<!-- id is a workaround for chart.js bugs -->
+		<button id="previewSettingsButton">
+			<sl-icon name="chevron-compact-down"></sl-icon>
+		</button>
+	
+	</div>
+	
+	<div id="previewGraphContainer">
+		<canvas id="previewTransmissionGraph"></canvas>
+	</div>
+</div>
+
+
+
+<div id="previewPane" class="previewContainer" selected="projection">
+
+	<div id="previewImage">
+		<img src="" class="image-projection" alt="">
+	</div>
+
+	<div id="previewLayout" name="layout">
+		<img src="" class="image-scene" alt="">
+	</div>
+
+    <div id="previewSim" name="simulation" style="width: 100%; height: 100%; position: relative;">
+        <div id="simContainer" style="width: 100%; height: 100%;"></div>
+        <sl-button id="btnStartScan" variant="success" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">Start CT Scan</sl-button>
+    </div>
+
+	<div id="previewReconstruction">
+		<div class="stacker">
+			<video src="" class="image-recon" alt="" muted autoplay playsinline loop></video>
+			<div class="overlay overlay-recon update">
+				<div>
+					<div>
+						Use<br />
+						<span>
+							<sl-icon name="box"></sl-icon> Reconstruct
+						</span><br />
+						To perform a tomographic reconstruction on simulated projections.<br>
+					</div>
+					<div class="generating">
+						Reconstructing Volume...<br>
+						<sl-spinner></sl-spinner>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

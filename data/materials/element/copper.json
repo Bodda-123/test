@@ -1,0 +1,9 @@
+{
+	"label": "Copper",
+	"description": "Copper Metal",
+	"density": 8.96,
+	"material": [
+		"element",
+		"Cu"
+	]
+}

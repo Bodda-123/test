@@ -1,0 +1,27 @@
+{% extends "base.html.j2" %}
+
+{% block title %}
+Login - Educational CT Simulator
+{% endblock title %}
+
+{% block content %}
+<main style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--sl-color-neutral-100);">
+    <div style="background: white; padding: 2rem; border-radius: var(--sl-border-radius-medium); box-shadow: var(--sl-shadow-large); text-align: center; max-width: 400px; width: 100%;">
+        
+        <!-- Institutional Branding -->
+        <div style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+                <img src="{{ url_for('static', filename='img/logo_faculty.png') }}" alt="Faculty Logo" style="height: 60px;">
+                <img src="{{ url_for('static', filename='img/logo_radiology.png') }}" alt="Radiology Logo" style="height: 60px;">
+            </div>
+            <h1 style="font-size: 1.5rem; color: var(--sl-color-primary-600); margin: 0;">CT Workflow Simulator</h1>
+            <p style="color: var(--sl-color-neutral-500); font-size: 0.9rem;">Faculty of Applied Health Sciences Technology</p>
+        </div>
+
+        <form action="{{ url_for('app.login') }}" method="post">
+            <sl-input name="student_name" label="Student Name" placeholder="Enter your name" required style="margin-bottom: 1rem; text-align: left;"></sl-input>
+            <sl-button type="submit" variant="primary" size="large" style="width: 100%;">Enter Simulation</sl-button>
+        </form>
+    </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,4 @@
+gvxr
+imageio[ffmpeg]
+git+https://bitbucket.org/spekpy/spekpy_release.git
+xpecgen

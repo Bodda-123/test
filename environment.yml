@@ -1,0 +1,36 @@
+name: webct
+channels:
+  - conda-forge
+  - ccpi
+  - https://software.repos.intel.com/python/conda
+  - astra-toolbox
+dependencies:
+  - python>=3.9
+
+  # use (smaller, better, faster, stronger) open-source BLAS libraries to avoid
+  # massive bloatware and license infringements from mkl used by default numpy
+  - conda-forge::blas=*=openblas
+
+  # Runtime
+  - flask
+  - scipy
+  - matplotlib<3.5
+  - opencv
+  - cil>=24.3.0
+  - tigre
+  - astra-toolbox
+  - ccpi-regulariser
+  - py-cpuinfo
+
+  # Packaging
+  - pyinstaller
+
+  # Pip packages
+  # (environment.yml does not support multiple pip: keys.)
+  - pip
+  - pip:
+    # Runtime
+    - gvxr
+    - imageio[ffmpeg]
+    - git+https://bitbucket.org/spekpy/spekpy_release.git
+    - xpecgen

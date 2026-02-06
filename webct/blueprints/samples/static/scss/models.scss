@@ -1,0 +1,240 @@
+div.model {
+	display: grid;
+	width: 100%;
+	border-width: 1px;
+	border-color: var(--sl-panel-border-color);
+	padding: 0;
+	background-color: var(--sl-panel-background-color);
+	grid-template-columns: 2rem auto;
+	margin: 1rem;
+	margin-left: 0rem;
+	border-radius: var(--sl-border-radius-large);
+}
+
+div.model > div:not(.remove) {
+	padding: 0.5rem;
+}
+
+div.model > div:not(.remove) > * {
+	margin: 0.1rem;
+}
+
+div.model div.remove button {
+	height: 100%;
+	display: block;
+	width: 100%;
+	background-color: var(--sl-color-danger-400);
+	border-right: 2px;
+	border-style: solid;
+	border-color: var(--sl-color-danger-400);
+	box-sizing: border-box;
+	transition: all 0.2s;
+	border-top-left-radius: var(--sl-border-radius-large);
+	border-bottom-left-radius: var(--sl-border-radius-large);
+}
+
+div.model div.remove button:hover {
+	background-color: var(--sl-color-danger-300);
+	transition: all 0.2s;
+}
+
+div.model div.remove button:active {
+	background-color: var(--sl-color-danger-700);
+	border-color: var(--sl-color-danger-700);
+	transition: all 0s;
+}
+
+div.model > div:not(.remove) {
+	padding-left: 1rem;
+}
+
+div.buttons {
+	display: inline-grid;
+	grid-template-columns: 7rem auto 7rem 1rem 7rem;
+	width: 100%;
+	margin-top: 1rem;
+}
+
+div.buttons > sl-button#buttonMaterialSave {
+	grid-column-start: 3;
+}
+
+div.buttons > sl-button.close {
+	grid-column-start: 1;
+}
+
+div.buttons > sl-button#buttonMaterialSubmit {
+	grid-column-start: 5;
+}
+
+div.buttons > sl-button#buttonCategorySubmit {
+	grid-column-start: 5;
+}
+
+sl-dialog > div:first-child > * {
+	margin-top: 0;
+}
+
+div#divSamples > div {
+	opacity: 1;
+	transition: all 1s;
+	height: auto;
+}
+
+div#divSamples > div.model.removed {
+	transition: all 1s;
+	opacity: 0;
+	margin: 0;
+	overflow: hidden;
+	height: 0;
+	transform: translateY(-2rem);
+}
+
+#buttonSampleSubmit {
+	grid-column-start: 5;
+}
+
+sl-dialog#dialogueMaterial {
+	--width: 70%;
+	--height: 70%;
+}
+
+sl-dialog sl-tab-group > sl-button[slot=nav] {
+	width: fit-content;
+	align-self: center;
+}
+
+sl-dialog::part(body) {
+	padding-top: 0;
+}
+
+div\.buttons > sl-button {
+	box-sizing: border-box;
+}
+
+sl-tab {
+	text-transform: capitalize;
+}
+
+form.materialForm {
+	display: grid;
+	grid-template-columns: 36px auto;
+}
+
+form.materialForm > * {
+	margin: 0.25rem;
+	grid-column-start: 2;
+	grid-column-end: 3;
+}
+
+
+
+form.materialForm > sl-dropdown {
+	grid-column-start: 1;
+	grid-column-end: 2;
+	align-self: flex-end;
+	font-size: 20px;
+	margin: 0;
+	padding-bottom: 0.3rem;
+}
+
+form.materialForm > sl-button {
+	margin-top: 1.5rem;
+	width: 2.5rem;
+}
+
+form.materialForm > sl-divider {
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+
+div.mixture:not(.hidden) {
+	display: grid;
+}
+
+sl-dialog > sl-radio-group > div {
+	border-style: solid;
+	box-sizing: border-box;
+	border-width: 2px;
+	border-radius: var(--sl-border-radius-medium);
+	border-color: var(--sl-panel-border-color);
+	box-sizing: border-box;
+	padding: 1rem;
+	padding-top: 0;
+	transition: all 0.25s ease-out;
+}
+
+sl-dialog input {
+	display: block;
+	margin-top: 0.25rem;
+	margin-bottom: 0.5rem;
+}
+
+sl-dialog > sl-radio-group > div.radioselect {
+	border-color: var(--sl-color-primary-500);
+	border-style: solid;
+	transition: all 0.25s ease-in;
+}
+
+sl-progress-bar.success {
+	--indicator-color: var(--sl-color-success-500)
+}
+
+sl-progress-bar.fail {
+	--indicator-color: var(--sl-color-danger-500)
+}
+
+div.mixture > ul > li {
+	display: grid;
+	grid-template-columns: 3rem 10rem 10rem;
+	grid-column-gap: 1rem;
+	width: 100%;
+	box-sizing: border-box;
+	margin-bottom: 0.5rem;
+}
+
+div.mixture > ul > li * {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+div.mixture > ul {
+	padding: 0;
+	grid-column: span 3;
+}
+
+div.mixture {
+	grid-template-columns: 3rem 10rem 10rem;
+	grid-column-gap: 1rem;
+	width: 100%;
+	box-sizing: border-box;
+	margin-bottom: 0.5rem;
+}
+
+.newMixtureEntry {
+	grid-column: 2 / 4;
+}
+
+#tabMaterial {
+	overflow: hidden;
+	max-height: 70vh;
+}
+
+::part(tabs) {
+	overflow-x: hidden;
+	overflow-y: auto;
+	scrollbar-width: thin;
+}
+
+::part(tabs)::-webkit-scrollbar-track {
+	width: 10px;
+}
+
+sl-menu-item.danger::part(base) {
+	color: var(--sl-color-danger-500)
+}
+
+form > sl-dropdown > sl-menu > sl-menu-item::part(base) {
+	white-space: nowrap;
+}
