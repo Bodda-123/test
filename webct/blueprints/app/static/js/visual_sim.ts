@@ -7,26 +7,39 @@ export class VisualSim {
     private camera: THREE.PerspectiveCamera;
     private renderer: THREE.WebGLRenderer;
     private animationId: number | null = null;
+    private clock: THREE.Clock;
 
     private gantry!: THREE.Group;
     private table!: THREE.Mesh;
     private patient!: THREE.Group;
     private scannerRing!: THREE.Mesh;
+    private hotspotMeshes: THREE.Mesh[] = [];
+
+    private defaultCameraPosition: THREE.Vector3;
+    private defaultCameraLookAt: THREE.Vector3;
+    private cameraTargetPosition: THREE.Vector3 | null = null;
+    private cameraTargetLookAt: THREE.Vector3 | null = null;
+    private highlightedMesh: THREE.Mesh | null = null;
 
     private isScanning: boolean = false;
     private tableZ: number = 0;
+    private scanPhase: number = 0;
+    private scanElapsed: number = 0;
 
     constructor(container: HTMLElement) {
         this.container = container;
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xf0f0f0); // Light gray background
+        this.clock = new THREE.Clock();
 
         const width = container.clientWidth;
         const height = container.clientHeight;
 
         this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
         this.camera.position.set(2, 2, 4);
-        this.camera.lookAt(0, 0, 0);
+        this.camera.lookAt(0, 1, 0);
+        this.defaultCameraPosition = this.camera.position.clone();
+        this.defaultCameraLookAt = new THREE.Vector3(0, 1, 0);
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setSize(width, height);
@@ -35,6 +48,8 @@ export class VisualSim {
         this.initLights();
         this.initObjects();
         this.addInteractions();
+        this.bindResetButton();
+        this.updateWorkflow(0, "Ready to begin. Click “Start CT Scan”.");
 
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
         this.animate();
@@ -89,25 +104,47 @@ export class VisualSim {
         const skinMat = new THREE.MeshPhongMaterial({ color: 0xffccaa });
         const head = new THREE.Mesh(headGeo, skinMat);
         head.position.z = -0.8;
-        head.userData = { name: "Head", info: "Brain, Skull, Sinuses. High attenuation bone, soft tissue brain." };
+        this.registerHotspot(head, {
+            title: "Head",
+            description: "Brain, skull, and sinuses. CT reveals hemorrhage, trauma, and sinus disease.",
+            attenuation: "High attenuation bone and low attenuation air spaces."
+        });
         this.patient.add(head);
 
         // Body/Chest
         const bodyGeo = new THREE.CapsuleGeometry(0.2, 0.8, 4, 8);
         const body = new THREE.Mesh(bodyGeo, skinMat);
         body.rotation.x = Math.PI / 2;
-        body.userData = { name: "Chest", info: "Lungs, Heart, Ribs. Low attenuation air in lungs, high contrast bones." };
+        this.registerHotspot(body, {
+            title: "Chest",
+            description: "Lungs, heart, and ribs. CT explains lung detail and mediastinal anatomy.",
+            attenuation: "Low attenuation air in lungs, high contrast for bone and vessels."
+        });
         this.patient.add(body);
+
+        // Arm
+        const armGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.6, 16);
+        const arm = new THREE.Mesh(armGeo, skinMat);
+        arm.rotation.z = Math.PI / 2;
+        arm.position.set(0.3, 0.05, -0.1);
+        this.registerHotspot(arm, {
+            title: "Arm",
+            description: "Humerus and soft tissues. CT helps evaluate fractures and soft tissue injury.",
+            attenuation: "Bone is high attenuation; muscle is mid attenuation."
+        });
+        this.patient.add(arm);
 
         // Legs (roughly)
         const legGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.9, 16);
         const legL = new THREE.Mesh(legGeo, skinMat);
         legL.rotation.x = Math.PI / 2;
         legL.position.set(-0.1, 0, 0.8);
-        legL.userData = { name: "Legs", info: "Femur, Tibia, Muscles. Bone fractures, soft tissue injuries." };
         this.patient.add(legL);
 
         const legR = legL.clone();
+        if (legR.material instanceof THREE.Material) {
+            legR.material = legR.material.clone();
+        }
         legR.position.set(0.1, 0, 0.8);
         this.patient.add(legR);
 
@@ -129,41 +166,89 @@ export class VisualSim {
             mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
             raycaster.setFromCamera(mouse, this.camera);
-            const intersects = raycaster.intersectObjects(this.patient.children);
+            const intersects = raycaster.intersectObjects(this.hotspotMeshes);
 
             if (intersects.length > 0) {
                 const object = intersects[0].object;
-                this.showTooltip(event.clientX, event.clientY, object.userData);
+                this.showInfoPanel(object);
             } else {
-                this.hideTooltip();
+                this.resetFocus();
             }
         });
     }
 
-    private showTooltip(x: number, y: number, data: any): void {
-        let tooltip = document.getElementById("sim-tooltip");
-        if (!tooltip) {
-            tooltip = document.createElement("div");
-            tooltip.id = "sim-tooltip";
-            tooltip.style.position = "fixed";
-            tooltip.style.backgroundColor = "white";
-            tooltip.style.padding = "10px";
-            tooltip.style.border = "1px solid #ccc";
-            tooltip.style.borderRadius = "5px";
-            tooltip.style.pointerEvents = "none";
-            tooltip.style.zIndex = "1000";
-            document.body.appendChild(tooltip);
+    private showInfoPanel(object: THREE.Object3D): void {
+        const data = object.userData as { title?: string; description?: string; attenuation?: string };
+        const title = document.getElementById("simInfoTitle");
+        const text = document.getElementById("simInfoText");
+        if (title) {
+            title.textContent = data.title ? data.title : "Anatomical Focus";
         }
-        tooltip.innerHTML = `<strong>${data.name}</strong><br>${data.info}`;
-        tooltip.style.left = x + 10 + "px";
-        tooltip.style.top = y + 10 + "px";
-        tooltip.style.display = "block";
+        if (text) {
+            const details = [
+                data.description,
+                data.attenuation ? `Attenuation: ${data.attenuation}` : undefined,
+            ].filter(Boolean);
+            text.textContent = details.join(" ");
+        }
+        if (object instanceof THREE.Mesh) {
+            this.highlightHotspot(object);
+        }
+        this.focusOn(object);
     }
 
-    private hideTooltip(): void {
-        const tooltip = document.getElementById("sim-tooltip");
-        if (tooltip) {
-            tooltip.style.display = "none";
+    private bindResetButton(): void {
+        const resetButton = document.getElementById("btnResetView");
+        if (resetButton) {
+            resetButton.addEventListener("click", () => this.resetFocus());
+        }
+    }
+
+    private highlightHotspot(mesh: THREE.Mesh): void {
+        if (this.highlightedMesh && this.highlightedMesh !== mesh) {
+            this.resetHighlight(this.highlightedMesh);
+        }
+        this.highlightedMesh = mesh;
+        const material = mesh.material;
+        if (Array.isArray(material)) {
+            return;
+        }
+        if (!mesh.userData.originalColor && material instanceof THREE.MeshPhongMaterial) {
+            mesh.userData.originalColor = material.color.clone();
+            mesh.userData.originalEmissive = material.emissive.clone();
+        }
+        if (material instanceof THREE.MeshPhongMaterial) {
+            material.color = new THREE.Color(0x9f7aea);
+            material.emissive = new THREE.Color(0x4c1d95);
+            material.emissiveIntensity = 0.4;
+        }
+    }
+
+    private resetHighlight(mesh: THREE.Mesh): void {
+        const material = mesh.material;
+        if (Array.isArray(material)) {
+            return;
+        }
+        if (material instanceof THREE.MeshPhongMaterial && mesh.userData.originalColor) {
+            material.color = mesh.userData.originalColor;
+            material.emissive = mesh.userData.originalEmissive ?? new THREE.Color(0x000000);
+            material.emissiveIntensity = 0;
+        }
+    }
+
+    private focusOn(object: THREE.Object3D): void {
+        const target = new THREE.Vector3();
+        object.getWorldPosition(target);
+        this.cameraTargetLookAt = target.clone();
+        this.cameraTargetPosition = target.clone().add(new THREE.Vector3(1.4, 1.1, 1.6));
+    }
+
+    private resetFocus(): void {
+        this.cameraTargetPosition = this.defaultCameraPosition.clone();
+        this.cameraTargetLookAt = this.defaultCameraLookAt.clone();
+        if (this.highlightedMesh) {
+            this.resetHighlight(this.highlightedMesh);
+            this.highlightedMesh = null;
         }
     }
 
@@ -178,25 +263,68 @@ export class VisualSim {
     public startScan(): void {
         if (this.isScanning) return;
         this.isScanning = true;
+        this.scanPhase = 0;
+        this.scanElapsed = 0;
         this.tableZ = 2; // Start position
+        this.table.position.z = this.tableZ;
+        this.updateWorkflow(0, "Patient enters the room and approaches the scanner.");
     }
 
     private animate(): void {
         requestAnimationFrame(this.animate.bind(this));
+        const delta = this.clock.getDelta();
 
         if (this.isScanning) {
+            this.scanElapsed += delta;
+            if (this.scanPhase === 0 && this.scanElapsed > 0.6) {
+                this.scanPhase = 1;
+                this.updateWorkflow(1, "Patient is positioned on the table.");
+            }
+            if (this.scanPhase === 1 && this.scanElapsed > 1.4) {
+                this.scanPhase = 2;
+                this.updateWorkflow(2, "Table moving into the gantry.");
+            }
+
             // Rotate Gantry
             this.scannerRing.rotation.z += 0.1;
 
             // Move Table
             if (this.table.position.z > -1) {
                 this.table.position.z -= 0.01;
+                if (this.scanPhase === 2) {
+                    this.scanPhase = 3;
+                    this.updateWorkflow(3, "Scan in progress. X-ray source rotates.");
+                }
             } else {
                 this.isScanning = false;
                 this.scannerRing.rotation.z = 0; // Reset
+                this.updateWorkflow(4, "Scan complete. Review results.");
             }
         }
 
+        if (this.cameraTargetPosition && this.cameraTargetLookAt) {
+            this.camera.position.lerp(this.cameraTargetPosition, 0.08);
+            const lookAtTarget = this.cameraTargetLookAt;
+            this.camera.lookAt(lookAtTarget);
+        }
+
         this.renderer.render(this.scene, this.camera);
+    }
+
+    private updateWorkflow(stepIndex: number, status: string): void {
+        const steps = document.querySelectorAll<HTMLLIElement>("#simWorkflow li");
+        steps.forEach((step, index) => {
+            step.classList.toggle("is-active", index === stepIndex);
+            step.classList.toggle("is-complete", index < stepIndex);
+        });
+        const statusElement = document.getElementById("simStatus");
+        if (statusElement) {
+            statusElement.textContent = status;
+        }
+    }
+
+    private registerHotspot(mesh: THREE.Mesh, data: { title: string; description: string; attenuation: string; }): void {
+        mesh.userData = data;
+        this.hotspotMeshes.push(mesh);
     }
 }
